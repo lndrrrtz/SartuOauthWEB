@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.providers;
+package net.edu.sartuoauth.core.security.oauth2.providers;
 
 import java.util.Collection;
 
@@ -15,9 +15,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Component;
 
-import net.edu.sartuoauth.core.facades.ClientDetailsServiceFacade;
+import net.edu.sartuoauth.core.daos.ClientDetailsServiceDao;
 import net.edu.sartuoauth.core.security.authentication.ClientAuthenticationToken;
-import net.edu.sartuoauth.core.security.oauths2.models.UsuarioOauth;
+import net.edu.sartuoauth.core.security.oauth2.models.UsuarioOauth;
 
 @Component
 public class PublicClientAuthenticationProvider implements AuthenticationProvider {
@@ -25,7 +25,7 @@ public class PublicClientAuthenticationProvider implements AuthenticationProvide
 	private static final Logger LOGGER = LoggerFactory.getLogger(PublicClientAuthenticationProvider.class);
 	
 	@Autowired
-	private ClientDetailsServiceFacade clientDetailsServiceFacade;
+	private ClientDetailsServiceDao clientDetailsService;
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -37,7 +37,7 @@ public class PublicClientAuthenticationProvider implements AuthenticationProvide
 			throw new BadCredentialsException("Credenciales erroneas");
 		}
 		
-		ClientDetails clientDetails = clientDetailsServiceFacade.loadClientByClientId(clientId);
+		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
 		
 		if (clientDetails == null) {
 			LOGGER.debug("El Cliente {} no existe", clientId);

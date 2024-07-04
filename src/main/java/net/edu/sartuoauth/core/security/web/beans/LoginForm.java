@@ -9,25 +9,19 @@ public class LoginForm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull
-	private String anagrama;
+	private String idUsuario;
 		
 	@NotNull
 	private String contrasena;
 	
 	private String error;
-		
-	/**
-	 * @return the anagrama
-	 */
-	public String getAnagrama() {
-		return anagrama;
+
+	public String getIdUsuario() {
+		return idUsuario;
 	}
-	
-	/**
-	 * @param anagrama the anagrama to set
-	 */
-	public void setAnagrama(String anagrama) {
-		this.anagrama = anagrama;
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public String getContrasena() {

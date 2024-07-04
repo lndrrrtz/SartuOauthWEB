@@ -15,7 +15,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.util.WebUtils;
 
-import net.edu.sartuoauth.core.security.oauths2.OauthMethodSecurityConfig;
+import net.edu.sartuoauth.core.security.oauth2.OauthMethodSecurityConfig;
 
 public class OauthInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
 		implements WebApplicationInitializer {
@@ -38,10 +38,10 @@ public class OauthInitializer extends AbstractAnnotationConfigDispatcherServletI
 //			OauthWeb.class,
 //			OAuth2ServerConfig.class,
 //			OauthResourceServerConfiguration.class,
-			OauthAuthorizationServerConfig.class,
 			OauthEndpointSecurityConfig.class,
 			OauthAuthenticationSecurityConfig.class,
-			OauthMethodSecurityConfig.class,
+			OauthAuthorizationServerConfig.class,
+			OauthMethodSecurityConfig.class
 		};
 	}
 	

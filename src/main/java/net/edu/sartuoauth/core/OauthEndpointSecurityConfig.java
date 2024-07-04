@@ -22,13 +22,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.CorsFilter;
 
-import net.edu.sartuoauth.core.daos.ClientDetailsServiceDao;
+import net.edu.sartuoauth.core.facades.ClientDetailsServiceFacade;
 import net.edu.sartuoauth.core.security.filters.BearerTokenAuthenticationFilter;
 import net.edu.sartuoauth.core.security.filters.PublicClientAuthenticationFilter;
-import net.edu.sartuoauth.core.security.oauths2.providers.BasicAuthenticationProvider;
-import net.edu.sartuoauth.core.security.oauths2.providers.BearerAuthenticationProvider;
-import net.edu.sartuoauth.core.security.oauths2.providers.PublicClientAuthenticationProvider;
-import net.edu.sartuoauth.core.security.oauths2.services.OauthUserDetailsService;
+import net.edu.sartuoauth.core.security.oauth2.providers.BasicAuthenticationProvider;
+import net.edu.sartuoauth.core.security.oauth2.providers.BearerAuthenticationProvider;
+import net.edu.sartuoauth.core.security.oauth2.providers.PublicClientAuthenticationProvider;
+import net.edu.sartuoauth.core.security.oauth2.services.OauthUserDetailsService;
 
 @Order(1)
 @Configuration
@@ -42,7 +42,7 @@ public class OauthEndpointSecurityConfig extends WebSecurityConfigurerAdapter {
 	private BearerAuthenticationProvider bearerAuthenticationProvider;
 
 	@Autowired
-	private ClientDetailsServiceDao clientDetailsServiceDao;
+	private ClientDetailsServiceFacade clientDetailsService;
 
 	@Autowired
 	private PublicClientAuthenticationProvider publicClientAuthenticationProvider;
@@ -113,7 +113,7 @@ public class OauthEndpointSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public ClientDetailsUserDetailsService clientDetailsUserDetailsService() {
-		return new ClientDetailsUserDetailsService(clientDetailsServiceDao);
+		return new ClientDetailsUserDetailsService(clientDetailsService);
 	}
 
 	@Bean

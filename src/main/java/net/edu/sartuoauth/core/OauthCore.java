@@ -26,9 +26,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Configuration
 @EnableAspectJAutoProxy
 @PropertySource(value="classpath:/net/edu/sartuoauth/core/config/sartu.properties", ignoreResourceNotFound = true)
-@ComponentScan({ "net.edu.sartuoauth.core.daos.impl", "net.edu.sartuoauth.core.facades.impl", 
-	"net.edu.sartuoauth.core.services", "net.edu.sartuoauth.core.model",
-	"net.edu.sartuoauth.security.providers", "net.edu.sartuoauth.security.services"})
+@ComponentScan({ "net.edu.sartuoauth.core.daos.impl", "net.edu.sartuoauth.core.facades.impl",
+	"net.edu.sartuoauth.core.security.oauth2.providers", "net.edu.sartuoauth.core.security.oauth2.services" })
 public class OauthCore {
 
 	@Bean

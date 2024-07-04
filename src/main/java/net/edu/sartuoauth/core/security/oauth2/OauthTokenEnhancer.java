@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2;
+package net.edu.sartuoauth.core.security.oauth2;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;

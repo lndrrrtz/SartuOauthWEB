@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoi
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.edu.sartuoauth.core.security.oauths2.models.OIDCDiscovery;
+import net.edu.sartuoauth.core.security.oauth2.models.OIDCDiscovery;
 
 @RestController
 public class OidcEndpoint {

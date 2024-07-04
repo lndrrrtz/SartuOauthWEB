@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2;
+package net.edu.sartuoauth.core.security.oauth2;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;

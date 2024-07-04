@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.providers;
+package net.edu.sartuoauth.core.security.oauth2.providers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,18 +9,17 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 
-import net.edu.sartuoauth.core.facades.ClientDetailsServiceFacade;
-import net.edu.sartuoauth.core.security.oauths2.models.UsuarioOauth;
+import net.edu.sartuoauth.core.security.oauth2.models.UsuarioOauth;
 
-@Component
+//@Component
 public class BasicAuthenticationProvider extends DaoAuthenticationProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicAuthenticationProvider.class);
 	
 	@Autowired
-	private ClientDetailsServiceFacade clientDetailsServiceFacade;
+	private ClientDetailsService clientDetailsService;
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -28,7 +27,7 @@ public class BasicAuthenticationProvider extends DaoAuthenticationProvider {
 		String clientId = authentication.getName();
 		String clientSecret = (String) authentication.getCredentials();
 		
-		ClientDetails clientDetails = clientDetailsServiceFacade.loadClientByClientId(clientId);
+		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
 		
 		if (clientDetails == null) {
 			LOGGER.debug("El Cliente {} no existe", clientId);

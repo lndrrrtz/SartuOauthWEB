@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.providers;
+package net.edu.sartuoauth.core.security.oauth2.providers;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import net.edu.sartuoauth.core.beans.Usuario;
 import net.edu.sartuoauth.core.facades.UsuarioFacade;
-import net.edu.sartuoauth.core.security.oauths2.services.OauthUserDetailsService;
+import net.edu.sartuoauth.core.security.oauth2.services.OauthUserDetailsService;
 
 public class LoginAuthenticationProvider extends DaoAuthenticationProvider {
 	
@@ -31,10 +31,12 @@ public class LoginAuthenticationProvider extends DaoAuthenticationProvider {
 		
 		// Comprobar si usuario existe
 		if(usuario == null) {
-			throw new BadCredentialsException("El usuario no existe");
+			throw new BadCredentialsException("Credenciales incorrectas");
+//			throw new BadCredentialsException("El usuario no existe");
 		}
 		else if(!StringUtils.trimToEmpty(contrasena).equals(StringUtils.trimToEmpty(usuario.getContrasena()))) {
-			throw new BadCredentialsException("Contraseña incorrecta");
+			throw new BadCredentialsException("Credenciales incorrectas");
+			//throw new BadCredentialsException("Contraseña incorrecta");
 		}
 		
 		usernameUserDetailsService = (OauthUserDetailsService) getUserDetailsService();

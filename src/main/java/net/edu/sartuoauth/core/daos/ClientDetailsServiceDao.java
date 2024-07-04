@@ -1,7 +1,6 @@
 package net.edu.sartuoauth.core.daos;
 
-import net.edu.sartuoauth.core.facades.ClientDetailsServiceFacade;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 
-public interface ClientDetailsServiceDao extends ClientDetailsServiceFacade {
-
+public interface ClientDetailsServiceDao extends ClientDetailsService {
 }

@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -25,13 +26,13 @@ import org.springframework.web.filter.CorsFilter;
 
 import net.edu.sartuoauth.core.security.handlers.OauthLogoutHandler;
 import net.edu.sartuoauth.core.security.handlers.OauthLogoutSuccessHandler;
-import net.edu.sartuoauth.core.security.oauths2.providers.LoginAuthenticationProvider;
-import net.edu.sartuoauth.core.security.oauths2.services.OauthUserDetailsService;
+import net.edu.sartuoauth.core.security.oauth2.providers.LoginAuthenticationProvider;
+import net.edu.sartuoauth.core.security.oauth2.services.OauthUserDetailsService;
 
 @Order(2)
 @Configuration
 @EnableWebSecurity
-@PropertySource("classpath:net/sartuoauth/core/security/configuration.properties")
+@PropertySource("classpath:net/edu/sartuoauth/core/config/sartu.properties")
 //@ComponentScan(basePackages = { "net.edu.sartuoauth.security.crypto" })
 public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -43,6 +44,14 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 	
 	@Autowired
 	private CorsFilter corsFilter;
+	
+	/**
+	 * Configuración para evitar que los filtros de spring security se activen en las URLs de recursos
+	 */
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+	  web.ignoring().antMatchers("/recursos/**");
+	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -59,7 +68,7 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 			
 			.and()
 			.formLogin()
-				.usernameParameter("anagrama").passwordParameter("contrasena")
+				.usernameParameter("idUsuario").passwordParameter("contrasena")
 				.loginPage(URL_LOGIN)
 				.loginProcessingUrl(URL_LOGIN)
 			
@@ -111,7 +120,9 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 	@Bean
 	@Qualifier("loginAuthenticationProvider")
 	public LoginAuthenticationProvider loginAuthenticationProvider() {
-		return new LoginAuthenticationProvider();
+		LoginAuthenticationProvider loginAuthenticationProvider = new LoginAuthenticationProvider();
+		loginAuthenticationProvider.setUserDetailsService(usernameUserDetailsService());
+		return loginAuthenticationProvider;
 	}
 	
 	private static CharacterEncodingFilter getCharacterEncodingFilter() {

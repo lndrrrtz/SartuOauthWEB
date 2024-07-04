@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.services;
+package net.edu.sartuoauth.core.security.oauth2.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 
 import net.edu.sartuoauth.core.beans.Usuario;
 import net.edu.sartuoauth.core.beans.UsuarioAutenticado;
-import net.edu.sartuoauth.core.facades.UsuarioFacade;
+import net.edu.sartuoauth.core.daos.UsuarioDao;
 
 @Service
 public class OauthUserDetailsService implements UserDetailsService {
 	
 	@Autowired
-	private UsuarioFacade usuarioFacade;
+	private UsuarioDao usuarioDao;
 
 	@Override
 	public UserDetails loadUserByUsername(String identificacionUsuario) {
 		
 		UsuarioAutenticado usuarioAutenticado = new UsuarioAutenticado();
-		Usuario usuario = usuarioFacade.leerUsuario(identificacionUsuario);
+		Usuario usuario = usuarioDao.leerUsuario(identificacionUsuario);
 
 		BeanUtils.copyProperties(usuario, usuarioAutenticado);
 		usuarioAutenticado.setUsername(usuario.getId());

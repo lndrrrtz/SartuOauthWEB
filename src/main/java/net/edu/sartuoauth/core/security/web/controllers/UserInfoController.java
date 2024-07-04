@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.edu.sartuoauth.core.beans.Usuario;
 import net.edu.sartuoauth.core.facades.UsuarioFacade;
-import net.edu.sartuoauth.core.security.oauths2.models.UserInfo;
-import net.edu.sartuoauth.core.security.oauths2.models.UsuarioOauth;
+import net.edu.sartuoauth.core.security.oauth2.models.UserInfo;
+import net.edu.sartuoauth.core.security.oauth2.models.UsuarioOauth;
 
 @RestController
 public class UserInfoController {

@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.models;
+package net.edu.sartuoauth.core.security.oauth2.models;
 
 import java.io.Serializable;
 import java.util.Set;

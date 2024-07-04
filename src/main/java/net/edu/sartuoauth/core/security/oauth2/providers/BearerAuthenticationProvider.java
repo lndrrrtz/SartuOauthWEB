@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.providers;
+package net.edu.sartuoauth.core.security.oauth2.providers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Component;
 
 import net.edu.sartuoauth.core.security.authentication.BearerAuthenticationToken;
-import net.edu.sartuoauth.core.security.oauths2.models.UsuarioOauth;
+import net.edu.sartuoauth.core.security.oauth2.models.UsuarioOauth;
 
 @Component
 public class BearerAuthenticationProvider implements AuthenticationProvider {

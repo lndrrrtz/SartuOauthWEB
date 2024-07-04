@@ -3,6 +3,8 @@ package net.edu.sartuoauth.core.beans;
 
 import java.io.Serializable;
 
+import net.edu.sartuoauth.core.enums.TipoUsuario;
+
 public class Usuario implements Serializable{
 
 	private static final long serialVersionUID = 3268778679107821287L;
@@ -17,7 +19,7 @@ public class Usuario implements Serializable{
 	
 	private String email;
 	
-	private Integer tipo;
+	private TipoUsuario tipo;
 
 	public String getId() {
 		return id;
@@ -59,12 +61,12 @@ public class Usuario implements Serializable{
 		this.email = email;
 	}
 
-	public Integer getTipo() {
+	public TipoUsuario getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(Integer tipo) {
+	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
 	}
-	
+
 }

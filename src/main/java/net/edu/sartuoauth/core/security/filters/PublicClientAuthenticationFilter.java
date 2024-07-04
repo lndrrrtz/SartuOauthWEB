@@ -36,7 +36,7 @@ public class PublicClientAuthenticationFilter extends OncePerRequestFilter {
 	private AuthenticationManager authenticationManager; 
 	
 	@Autowired
-	private ClientDetailsServiceFacade clientDetailsServiceFacade;
+	private ClientDetailsServiceFacade clientDetailsService;
 	
 	public PublicClientAuthenticationFilter(AuthenticationManager authenticationManager, String... includedUrls) {
 		Assert.notNull(authenticationManager, "authenticationManager is required");
@@ -55,7 +55,7 @@ public class PublicClientAuthenticationFilter extends OncePerRequestFilter {
 			
 			try {
 				
-				ClientDetails clientDetails = clientDetailsServiceFacade.loadClientByClientId(clientId);
+				ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
 				
 				if (!clientDetails.isSecretRequired()) {
 					

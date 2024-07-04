@@ -7,7 +7,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import net.edu.sartuoauth.core.security.oauths2.models.UsuarioOauth;
+import net.edu.sartuoauth.core.security.oauth2.models.UsuarioOauth;
 
 public class UsuarioArgumentResolver implements HandlerMethodArgumentResolver {
 

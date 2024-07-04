@@ -17,8 +17,5 @@ public class ClientDetailsServiceFacadeImpl implements ClientDetailsServiceFacad
 	@Override
 	public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 		return clientDetailsServiceDao.loadClientByClientId(clientId);
-//		BaseClientDetails baseClientDetails = new BaseClientDetails("10000", "1", "read", "authorization_code", "ROLE_CLIENT", "http://localhost:9080/SartuOauthWEB/login");
-//		baseClientDetails.isAutoApprove("true");
-//		return baseClientDetails;
 	}
 }

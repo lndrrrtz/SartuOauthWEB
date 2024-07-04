@@ -7,7 +7,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -40,8 +39,8 @@ import org.springframework.web.filter.CorsFilter;
 import net.edu.sartuoauth.core.daos.impl.OauthAuthorizationCodeServices;
 import net.edu.sartuoauth.core.daos.impl.OauthJdbcTokenStore;
 import net.edu.sartuoauth.core.facades.ClientDetailsServiceFacade;
-import net.edu.sartuoauth.core.security.oauths2.OauthTokenEnhancer;
-import net.edu.sartuoauth.core.security.oauths2.pkce.PkceAuthorizationCodeTokenGranter;
+import net.edu.sartuoauth.core.security.oauth2.OauthTokenEnhancer;
+import net.edu.sartuoauth.core.security.oauth2.pkce.PkceAuthorizationCodeTokenGranter;
 
 @Configuration
 @EnableAuthorizationServer
@@ -57,13 +56,13 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 	private JndiObjectFactoryBean jndiObjectFactoryBean;
 	
 	@Autowired
-	private ClientDetailsServiceFacade clientDetailsServiceFacade;
+	private ClientDetailsServiceFacade clientDetailsService;
 
 	@Autowired
 	private CorsFilter corsFilter;
 	
-	@Value("${jwt.signing.key}")
-	private String signingKey;
+//	@Value("${jwt.signing.key}")
+//	private String signingKey;
 	
 	@Bean
 	public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {
@@ -87,7 +86,7 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.withClientDetails(clientDetailsServiceFacade);
+		clients.withClientDetails(clientDetailsService);
 	}
 
 	@Override
@@ -146,7 +145,7 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(signingKey);
+//		converter.setSigningKey(signingKey);
 		return converter;
 	}
 
@@ -156,7 +155,7 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 		DefaultTokenServices tokenServices = new DefaultTokenServices();
 		tokenServices.setSupportRefreshToken(Boolean.TRUE);
 		tokenServices.setTokenStore(tokenStore());
-		tokenServices.setClientDetailsService(clientDetailsServiceFacade);
+		tokenServices.setClientDetailsService(clientDetailsService);
 		return tokenServices;
 	}
 	

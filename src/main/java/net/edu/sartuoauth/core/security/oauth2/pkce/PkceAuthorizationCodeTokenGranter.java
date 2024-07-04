@@ -1,4 +1,4 @@
-package net.edu.sartuoauth.core.security.oauths2.pkce;
+package net.edu.sartuoauth.core.security.oauth2.pkce;
 
 import java.util.HashMap;
 import java.util.Map;
