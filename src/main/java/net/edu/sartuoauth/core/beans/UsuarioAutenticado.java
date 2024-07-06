@@ -6,16 +6,25 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Component
 public class UsuarioAutenticado implements UserDetails {
 
 	private static final long serialVersionUID = -8646648960567171781L;
 
+	@JsonIgnore
 	private String username;
 	
-	private Collection<? extends GrantedAuthority> authorities;
+	private String id;
 	
-	private boolean nifDuplicado;
+	private String nombre;
+	
+	private String dni;
+	
+	private String email; 
+	
+	private Collection<? extends GrantedAuthority> authorities;
 	
 	public UsuarioAutenticado() {
 		super();
@@ -44,14 +53,6 @@ public class UsuarioAutenticado implements UserDetails {
 		this.username = username;
 	}
 
-	public boolean isNifDuplicado() {
-		return nifDuplicado;
-	}
-	
-	public void setNifDuplicado(boolean nifDuplicado) {
-		this.nifDuplicado = nifDuplicado;
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -70,6 +71,38 @@ public class UsuarioAutenticado implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

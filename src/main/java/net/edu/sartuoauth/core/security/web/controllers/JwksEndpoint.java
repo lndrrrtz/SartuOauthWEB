@@ -13,10 +13,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Basado en especificación JSON Web Key (JWK): https://datatracker.ietf.org/doc/html/rfc7517
+ * <p>Endpoint que espone JSON Web Key Set (JWKS).</p>
+ * 
+  * <p>Este controlador proporciona un endpoint JSON Web Key Set (JWKS) que expone la clave pública
+ * en un formato que cumple con la especificación JSON Web Key (JWK) definida en 
+ * <a href="https://datatracker.ietf.org/doc/html/rfc7517">RFC 7517</a>.
+ * Esto permite a los clientes obtener la clave pública y usarla para verificar los JWT firmados por Sartu.
+ * </p>
  */
 @Controller
 public class JwksEndpoint {
+	
+	private static final String KTY = "kty";
+	private static final String KID = "kid";
+	private static final String USE = "use";
+	private static final String ALG = "alg";
+	private static final String N = "n"; 
+	private static final String E = "e";
+	private static final String RSA = "RSA"; 
+	private static final String SIG = "sig"; 
+	private static final String RS256 = "RS256";
+	private static final String KEYS = "keys"; 
 	
 	@Autowired
 	private RSAPublicKey rsaPublicKey;
@@ -28,13 +45,13 @@ public class JwksEndpoint {
 	@ResponseBody
 	public Map<String, Object> getJwks() {
 		Map<String, Object> jwk = new HashMap<>();
-		jwk.put("kty", "RSA");
-		jwk.put("kid", keyId);
-		jwk.put("use", "sig");
-		jwk.put("alg", "RS256");
-		jwk.put("n", Base64.getUrlEncoder().encodeToString(rsaPublicKey.getModulus().toByteArray()));
-		jwk.put("e", Base64.getUrlEncoder().encodeToString(rsaPublicKey.getPublicExponent().toByteArray()));
+		jwk.put(KTY, RSA);
+		jwk.put(KID, keyId);
+		jwk.put(USE, SIG);
+		jwk.put(ALG, RS256);
+		jwk.put(N, Base64.getUrlEncoder().encodeToString(rsaPublicKey.getModulus().toByteArray()));
+		jwk.put(E, Base64.getUrlEncoder().encodeToString(rsaPublicKey.getPublicExponent().toByteArray()));
 
-		return Collections.singletonMap("keys", Collections.singletonList(jwk));
+		return Collections.singletonMap(KEYS, Collections.singletonList(jwk));
 	}
 }
