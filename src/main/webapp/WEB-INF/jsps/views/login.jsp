@@ -75,13 +75,13 @@
 						<!-- Id del usuario -->
 						<div class="form-group mb-4">
 							<label for="idUsuario">Usuario/a</label>
-							<form:input path="idUsuario" class="form-control" cssErrorClass="form-control is-invalid" id="idUsuario" autofocus="true" />
+							<form:input path="idUsuario" class="form-control" id="idUsuario" autofocus="true" />
 						</div>
 						
 						<!-- Contraseña del usuario -->
 						<div class="form-group mb-4">
 							<label for="contrasena">Contrase&ntilde;a</label>
-							<form:password path="contrasena" class="form-control" cssErrorClass="form-control is-invalid" id="contrasena"/>
+							<form:password path="contrasena" class="form-control" id="contrasena"/>
 						</div>
 						
 						<form:button class="btn btn-primary btn-block mb-1"><i class="fas fa-sign-in-alt"></i><i class="fa fa-sign-in mr-2 align-middle"></i>Entrar</form:button>
@@ -108,28 +108,11 @@
 					</form:form>
 			</section>
 		</div>
-<!-- 	</div> -->
-			
-			
-<!-- 			<label for="usuario">Usuario/a</label> -->
-<%-- 			<form:input path="usuario" class="form-control" cssErrorClass="form-control is-invalid" id="usuario" autofocus="true" /> --%>
-			
-<!-- 			<label for="contrasena">Contrase&ntilde;a</label> -->
-<%-- 			<form:password path="contrasena" class="form-control" cssErrorClass="form-control is-invalid" id="contrasena"/> --%>
-			
-<%-- 			<form:button class="btn btn-primary"><i class="far fa-sign-in mr-2 align-middle"></i>Sartu - Entrar</form:button> --%>
-			
-			
-			
-			
-<!-- 			Proba -->
-<%-- 		</form:form> --%>
 	</body>
+	
 	<footer class="bg-body-tertiary text-center text-lg-start">
-<!-- 	<footer class="bg-info text-center text-lg-start fixed-bottom"> -->
-  	<div class="text-center p-3 bg-light">
-    <a class="text-body" href="https://www.unir.net/" target="_blank"><img src="${ruta_recursos}/imagenes/unir.svg" width="50" alt="cargando" /></a>
-  </div>
-  <!-- Copyright -->
-</footer>
+		<div class="text-center p-3 bg-light">
+			<a class="text-body" href="https://www.unir.net/" target="_blank"><img src="${ruta_recursos}/imagenes/unir.svg" width="50" alt="cargando" /></a>
+		</div>
+	</footer>
 </html>
