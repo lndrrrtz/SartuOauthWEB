@@ -53,6 +53,12 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 	  web.ignoring().antMatchers("/recursos/**");
 	}
 	
+	/**
+	 * Configura la seguridad web, incluyendo el inicio de sesión y el cierre de sesión.
+	 * 
+	 * @param http el objeto {@link HttpSecurity} utilizado para construir la configuración de seguridad.
+	 * @throws Exception si ocurre un error en la configuración de la seguridad web.
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/oauth/**");
@@ -67,15 +73,24 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 				.anyRequest().authenticated()
 			
 			.and()
+			// Configura el formulario de inicio de sesión o login
 			.formLogin()
+			 	// Establece los campos del formulario que se utilizarán para el login
 				.usernameParameter("idUsuario").passwordParameter("contrasena")
+				// URL de página de login
 				.loginPage(URL_LOGIN)
+				// URL donde se gestionan las credenciales del usuario
 				.loginProcessingUrl(URL_LOGIN)
 			
 			.and()
+			
+			// Configurar el cierre de sesión o logout
 			.logout()
+				// URL para el cierre de sesión
 				.logoutRequestMatcher(new AntPathRequestMatcher(URL_LOGOUT))
+				// Manejador de logout personalizado
 				.addLogoutHandler(oauthLogoutHandler())
+				// Manejador que se utiliza cuando el logout se ha realizado con éxito
 				.logoutSuccessHandler(oauthLogoutSuccessHandler())
 
 			.and()

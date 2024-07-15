@@ -12,9 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.edu.sartuoauth.core.security.oauth2.models.OIDCDiscovery;
 
+
+/**
+ * Controlador REST para manejar el endpoint de descubrimiento OpenID Connect (OIDC).
+ * 
+ * Permite a los clientes o desarrolladores obtener información sobre los endpoints.
+ */
 @RestController
 public class OidcEndpoint {
 
+	// URL base para los endpoints de OAuth
 	private static final String URL_OAUTH = "http://localhost:9081/SartuOauthWEB/";
 	
 	@Autowired 
@@ -27,9 +34,19 @@ public class OidcEndpoint {
 //		this.oidcDiscovery = oidcDiscovery;
 //	}
 
+	/**
+     * Endpoint para la configuración de descubrimiento OpenID Connect (OIDC).
+     * 
+     * Contiene la configuración y los endpoints soportados por el servidor de identidad (IdP).
+     * 
+     * @return una respuesta HTTP que contiene la configuración de descubrimiento OIDC.
+     */
 	@RequestMapping("/.well-known/openid-configuration")
 	public ResponseEntity<OIDCDiscovery> openIdDiscovery() {
+		
 		OIDCDiscovery oidcDiscovery = new OIDCDiscovery();
+		
+		// Configura los endpoints de OIDC
 		oidcDiscovery.setIssuer(String.join(URL_OAUTH, "tokenid"));
 		oidcDiscovery.setTokenEndpoint(String.join(URL_OAUTH, "oauth/token"));
 		oidcDiscovery.setTokenKeyEndpoint(String.join(URL_OAUTH, "oauth/token_key"));
@@ -51,6 +68,7 @@ public class OidcEndpoint {
 		oidcDiscovery.setGrantTypesSupported(new HashSet<>(Arrays.asList("authorization_code", "refresh_token", "client_credentials")));
 //		oidcDiscovery.setGrantTypesSupported(new HashSet<>(Arrays.asList("client_secret_basic", "client_secret_post")));
 		
+		// Devuelve la configuración de descubrimiento OIDC
 		return new ResponseEntity<>(oidcDiscovery, HttpStatus.OK);
 	}
 

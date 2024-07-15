@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import net.edu.sartuoauth.core.enums.TipoUsuario;
 
-public class Usuario implements Serializable{
+public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 3268778679107821287L;
 

@@ -3,6 +3,7 @@ package net.edu.sartuoauth.core.security.handlers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,18 @@ public class OauthLogoutHandler extends SecurityContextLogoutHandler {
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		
-		String authorization = request.getHeader("Authorization");
+		String tokenValue = request.getParameter("id_token_hint");
 		
-		if (authorization != null && authorization.contains("Bearer")) {
-			String tokenValue = authorization.replace("Bearer", "").trim();
+		if (StringUtils.isBlank(tokenValue)) {
+			
+			String authorization = request.getHeader("Authorization");
+		
+			if (authorization != null && authorization.contains("Bearer")) {
+				tokenValue = authorization.replace("Bearer", "").trim();
+			}
+		}
+		
+		if (StringUtils.isNotBlank(tokenValue)) {
 		
 			try {
 				tokenServices.revokeToken(tokenValue);

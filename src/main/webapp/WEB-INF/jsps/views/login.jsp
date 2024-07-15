@@ -112,7 +112,7 @@
 	
 	<footer class="bg-body-tertiary text-center text-lg-start">
 		<div class="text-center p-3 bg-light">
-			<a class="text-body" href="https://www.unir.net/" target="_blank"><img src="${ruta_recursos}/imagenes/unir.svg" width="50" alt="cargando" /></a>
+			<a class="text-body" href="https://www.unir.net/" target="_blank"><img src="${ruta_recursos}/imagenes/unir.svg" width="50" alt="UNIR" /></a>
 		</div>
 	</footer>
 </html>

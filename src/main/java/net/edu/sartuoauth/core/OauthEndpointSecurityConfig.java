@@ -30,6 +30,11 @@ import net.edu.sartuoauth.core.security.oauth2.providers.BearerAuthenticationPro
 import net.edu.sartuoauth.core.security.oauth2.providers.PublicClientAuthenticationProvider;
 import net.edu.sartuoauth.core.security.oauth2.services.OauthUserDetailsService;
 
+/**
+ * Configura la autenticación y los filtros de seguridad para la aplicación.
+ * 
+ * Personaliza la configuración de seguridad de Spring Security.
+ */
 @Order(1)
 @Configuration
 @EnableWebSecurity
@@ -73,24 +78,52 @@ public class OauthEndpointSecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable();
 	}
 	
+	/**
+     * Configura los proveedores de autenticación. Sobrescribe la configuración de AuthenticationManagerBuilder
+     * para añadir proveedores de autenticación personalizados.
+     * 
+     * @param auth Constructor para configurar los proveedores de autenticación.
+     * @throws Exception si ocurre un error durante la configuración de los proveedores de autenticación.
+     */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// Configurar el proveedor de autenticación para tokens Bearer
 		auth.authenticationProvider(bearerAuthenticationProvider);
+		// Configurar el proveedor de autenticación para clientes públicos
 		auth.authenticationProvider(publicClientAuthenticationProvider);
+		// Configurar el proveedor de autenticación para autenticación básica
 		auth.authenticationProvider(basicAuthenticationProvider());
 	}
 
+	/**
+     * Define el bean AuthenticationManager que es el encargado de la autenticación en Spring Security.
+     * 
+     * @return {@link AuthenticationManager}
+     * @throws Exception si ocurre un error durante la configuración del bean.
+     */
 //	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 
+	/**
+     * Define el filtro de autenticación para tokens Bearer.
+     * 
+     * @return {@link BearerTokenAuthenticationFilter}
+     * @throws Exception si ocurre un error durante la configuración del filtro.
+     */
 	@Bean
 	public BearerTokenAuthenticationFilter bearerTokenAutenticacionFilter() throws Exception {
 		return new BearerTokenAuthenticationFilter(authenticationManagerBean(), "/oauth/revoke", "/oauth/userinfo", "/oauth/introspect");
 	}
 
+	/**
+     * Define el filtro de autenticación para clientes públicos.
+     * 
+     * @return {@link PublicClientAuthenticationFilter}
+     * @throws Exception si ocurre un error durante la configuración del filtro.
+     */
 	@Bean
 	public PublicClientAuthenticationFilter publicClientAutenticacionFilter() throws Exception {
 		return new PublicClientAuthenticationFilter(authenticationManagerBean(), "/oauth/revoke");
@@ -106,6 +139,11 @@ public class OauthEndpointSecurityConfig extends WebSecurityConfigurerAdapter {
 //		return new PublicClientAuthenticationProvider();
 //	}
 
+	/**
+     * Define el servicio de detalles de usuario. Permite cargar los datos del usuario desde una fuente.
+     * 
+     * @return {@link OauthUserDetailsService}
+     */
 	@Bean
 	public OauthUserDetailsService usernameUserDetailsService() {
 		return new OauthUserDetailsService();

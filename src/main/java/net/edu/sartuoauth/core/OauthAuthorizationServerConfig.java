@@ -31,7 +31,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.TokenGranter;
@@ -105,46 +104,75 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 		security.addTokenEndpointAuthenticationFilter(corsFilter);
 	}
 	
+	/**
+	 * Sobrescribe la configuración predeterminada de la fuente desde donde se va a obtener información de los clientes
+	 * 
+	 * @Param clients Contiene configuración de los detalles del cliente
+	 * @throws Exception producida al intentar configurar la fuente de los clientes
+	 */
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.withClientDetails(clientDetailsService);
 	}
 
+	/**
+	 * Configura los endpoints del servidor de autorización.
+	 * 
+	 * Este método sobrescribe la configuración predeterminada de los endpoints del servidor de autorización para personalizar 
+	 * la gestión y almacenado de tokens, la gestión de la autenticación y servicios relacionados con el código de autorización.
+	 * 
+	 * @param endpoints el configurador de endpoints del servidor de autorización utilizado para definir sus características
+	 */
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
 		
+		// Permite agregar información adicional a los tokens
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
 		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
+		
+		// Configura los endpoints del servidor de autorización 
 		endpoints
+			// Configura el almacen de tokens
 			.tokenStore(tokenStore())
+			// Configura la agregación de información adicional a los tokens
 			.tokenEnhancer(tokenEnhancerChain)
+			// Configura el administrador de autenticación
 			.authenticationManager(authenticationManager)
-//			.authorizationCodeServices(authorizationCodeServices);
-		
-//		endpoints
-		.authenticationManager(authenticationManager)
+			// Congigura los servicios relacionados con los códigos de autorización
 			.authorizationCodeServices(oauthAuthorizationCodeService())
+			// Configura el emisor de tokens
 			.tokenGranter(tokenGranter(endpoints));
-		
-//		endpoints
-//		.authenticationManager(authenticationManager)
-//			.authorizationCodeServices(new PkceAuthorizationCodeServices(endpoints.getClientDetailsService(), encoder()))
-//			.tokenGranter(tokenGranter(endpoints));
 	}
 
+	/**
+	 * Configura el emisor de tokens 
+	 * 
+	 * Este método configura varios tipos de emisores de tokens que se encargan de la emisión tokens
+	 * 
+	 * @param endpoints el configurador de endpoints del servidor de autorización
+	 * @return {@link CompositeTokenGranter} que gestiona la emisión de tokens
+	 */
 	private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
+		
+		// Listado de emisores de tokens
 		List<TokenGranter> granters = new ArrayList<>();
 
+		// Obtener servicios y fábricas necesarias para la configuración de los endpoints
 		AuthorizationServerTokenServices tokenServices = endpoints.getTokenServices();
-		ClientDetailsService clientDetailsService = endpoints.getClientDetailsService();
 		OAuth2RequestFactory requestFactory = endpoints.getOAuth2RequestFactory();
 
+		// Emisor de tokens de actualización
 		granters.add(new RefreshTokenGranter(tokenServices, clientDetailsService, requestFactory));
+		// Emisor de tokens implicitos
 		granters.add(new ImplicitTokenGranter(tokenServices, clientDetailsService, requestFactory));
+		// Emisor de tokens de credenciales de clientes
 		granters.add(new ClientCredentialsTokenGranter(tokenServices, clientDetailsService, requestFactory));
+		// Emisor de tokens de contraseña del propietario del recurso
 		granters.add(new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
+		// Emisor de tokens de código de autorización con PKCE
 		granters.add(new PkceAuthorizationCodeTokenGranter(tokenServices, oauthAuthorizationCodeService(), clientDetailsService, requestFactory));
 
+		// Devuelve la cofiguración que gestiona la emisión de token
 		return new CompositeTokenGranter(granters);
 	}
 	
@@ -153,6 +181,11 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 		return new OauthTokenEnhancer();
 	}
 
+	/**
+	 * Configura la utilización de la base de datos para almacenar los tokens.
+	 * 
+	 * @return {@link OauthJdbcTokenStore} con la configuración de la base de datos.
+	 */
 	@Bean
 	public TokenStore tokenStore() {
 		return new OauthJdbcTokenStore((DataSource)jndiObjectFactoryBean.getObject());
@@ -163,28 +196,53 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 		return new OauthAuthorizationCodeServices((DataSource)jndiObjectFactoryBean.getObject());
 	}
 	
+	/**
+	 * Configura la codificación y decodificación de tokens JWT en el servidor de autorización.
+	 * 
+	 * Permite la conversión y firmado de los tokens JWT.
+	 * 
+	 * @return {@link JwtAccessTokenConverter} con la configuración para gestionar los tokens JWT
+	 */
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 		try {
+			// Configurar la firma de tokens con una firma RSA
 			converter.setSigner(rsaSigner());
 		} catch (Exception e) {
-			LOGGER.debug("Error al asignar verificador a JWTAccessTokenConverter", e);
+			LOGGER.debug("Error al asignar firmador a JWTAccessTokenConverter", e);
 		}
-//		converter.setSigningKey(signingKey);
+
+		// Devolver la configuración para gestionar los token JWT
 		return converter;
 	}
 
+	/**
+	 * Configura la gestión de los tokens. Proporciona los servicios para tokens predeterminados.
+	 * 
+	 * @return {@link DefaultTokenServices} con configuración para la gestión de los tokens.
+	 */
 	@Bean
 	@Primary
 	public DefaultTokenServices tokenServices() {
 		DefaultTokenServices tokenServices = new DefaultTokenServices();
+		
+		// Configuración que permite utilizar tokens de actualización
 		tokenServices.setSupportRefreshToken(Boolean.TRUE);
+		// Configura el almacen de tokens
 		tokenServices.setTokenStore(tokenStore());
+		// Configura la fuente desde donde se va a obtener información de los clientes
 		tokenServices.setClientDetailsService(clientDetailsService);
+		
+		// Devuelve la configuración para la gestión de tokens
 		return tokenServices;
 	}
 	
+	/**
+	 * Configura la gestión de los códigos de autorización y su almacenado en la base de datos
+	 * 
+	 * @return {@link OauthAuthorizationCodeServices} con configuración  de la base de datos
+	 */
 	@Bean
 	public JdbcAuthorizationCodeServices authorizationCodeService() {
 		return new OauthAuthorizationCodeServices((DataSource)jndiObjectFactoryBean.getObject());

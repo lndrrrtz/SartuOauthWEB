@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * <p>Endpoint que espone JSON Web Key Set (JWKS).</p>
+ * Endpoint que espone JSON Web Key Set (JWKS).
  * 
-  * <p>Este controlador proporciona un endpoint JSON Web Key Set (JWKS) que expone la clave pública
+ * Este controlador proporciona un endpoint JSON Web Key Set (JWKS) que expone la clave pública
  * en un formato que cumple con la especificación JSON Web Key (JWK) definida en 
- * <a href="https://datatracker.ietf.org/doc/html/rfc7517">RFC 7517</a>.
+ * https://datatracker.ietf.org/doc/html/rfc7517">RFC 7517.
  * Esto permite a los clientes obtener la clave pública y usarla para verificar los JWT firmados por Sartu.
- * </p>
  */
 @Controller
 public class JwksEndpoint {
