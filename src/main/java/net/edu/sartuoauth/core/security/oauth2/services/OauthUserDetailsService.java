@@ -32,7 +32,7 @@ public class OauthUserDetailsService implements UserDetailsService {
 
 		// Roles
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		GrantedAuthority usuarioAuthority = new SimpleGrantedAuthority("USUARIO_NORMAL");
+		GrantedAuthority usuarioAuthority = new SimpleGrantedAuthority(usuario.getTipo().toString());
 		authorities.add(usuarioAuthority);
 		usuarioAutenticado.setAuthorities(authorities);
 		
