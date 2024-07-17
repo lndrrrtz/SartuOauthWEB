@@ -43,8 +43,7 @@ public class OauthWeb extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addViewControllers(final ViewControllerRegistry registry) {
-//		registry.addViewController("/error").setViewName("login");
-//		registry.addViewController("/loginOauth").setViewName("login");
+		registry.addViewController("/accessDenied").setViewName("accessDenied");
 	}
 
 	@Override

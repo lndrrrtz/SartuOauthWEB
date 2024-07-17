@@ -2,6 +2,7 @@ package net.edu.sartuoauth.core.security.oauth2.providers;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,12 +17,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import net.edu.sartuoauth.core.beans.RegistroAuditoria;
 import net.edu.sartuoauth.core.beans.Usuario;
 import net.edu.sartuoauth.core.daos.utils.Constantes;
+import net.edu.sartuoauth.core.daos.utils.Utilidades;
 import net.edu.sartuoauth.core.enums.FlujoAutorizacion;
 import net.edu.sartuoauth.core.facades.RegistroAuditoriaFacade;
 import net.edu.sartuoauth.core.facades.UsuarioFacade;
 import net.edu.sartuoauth.core.security.oauth2.services.OauthUserDetailsService;
 
 public class LoginAuthenticationProvider extends DaoAuthenticationProvider {
+	
+	@Autowired
+	private HttpServletRequest request;
 	
 	@Autowired
 	private HttpSession httpSession;
@@ -43,6 +48,7 @@ public class LoginAuthenticationProvider extends DaoAuthenticationProvider {
 		
 		Usuario usuario = usuarioFacade.leerUsuario(idUsuario);
 		
+		String ip =  Utilidades.obtenerIp(request);
 		Date fecha = new Date();
 		
 		// Obtener client_id
@@ -53,6 +59,7 @@ public class LoginAuthenticationProvider extends DaoAuthenticationProvider {
 		
 		// Rellenar los datos del registro
 		RegistroAuditoria registroAuditoria = new RegistroAuditoria();
+		registroAuditoria.setIp(ip);
 		registroAuditoria.setIdUsuario(idUsuario);
 		registroAuditoria.setFlujo(FlujoAutorizacion.AUTHORIZATION_CODE.getValue());
 		registroAuditoria.setFecha(fecha);

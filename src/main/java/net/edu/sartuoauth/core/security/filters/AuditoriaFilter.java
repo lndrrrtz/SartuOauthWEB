@@ -1,8 +1,6 @@
 package net.edu.sartuoauth.core.security.filters;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 
 import javax.servlet.Filter;
@@ -25,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import net.edu.sartuoauth.core.beans.RegistroAuditoria;
 import net.edu.sartuoauth.core.daos.utils.Constantes;
+import net.edu.sartuoauth.core.daos.utils.Utilidades;
 import net.edu.sartuoauth.core.enums.FlujoAutorizacion;
 import net.edu.sartuoauth.core.facades.RegistroAuditoriaFacade;
 
@@ -57,8 +56,7 @@ public class AuditoriaFilter implements Filter {
 			String requestUri = httpRequest.getRequestURI();
 			LOGGER.debug(requestUri);
 			Date fecha = new Date();
-			String code = httpRequest.getParameter("code");
-			String ip =  this.obtenerIp(httpRequest);
+			String ip =  Utilidades.obtenerIp(httpRequest);
 			String clientId = httpRequest.getParameter("client_id");
 	
 			// scope
@@ -118,27 +116,6 @@ public class AuditoriaFilter implements Filter {
 		} else {
 			return principal.toString();
 		}
-	}
-	
-	private String obtenerIp(HttpServletRequest request) {
-	
-		final String server = request.getServerName();
-		
-		if ("localhost".equalsIgnoreCase(server)) {
-			try {
-				return InetAddress.getLocalHost().getHostAddress();
-			} catch (final UnknownHostException e) {
-				LOGGER.error("Error obteniendo ip", e);
-			}
-		}
-	
-		final String header = request.getHeader("X-Forwarded-For");
-	
-		if (header != null) {
-			return header;
-		}
-	
-		return request.getRemoteAddr();
 	}
 	
 }

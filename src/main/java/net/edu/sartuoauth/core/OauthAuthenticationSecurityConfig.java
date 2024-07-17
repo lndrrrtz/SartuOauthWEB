@@ -26,6 +26,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.CorsFilter;
 
 import net.edu.sartuoauth.core.security.filters.CapturaParametrosFilter;
+import net.edu.sartuoauth.core.security.filters.RestriccionesFilter;
 import net.edu.sartuoauth.core.security.handlers.OauthLogoutHandler;
 import net.edu.sartuoauth.core.security.handlers.OauthLogoutSuccessHandler;
 import net.edu.sartuoauth.core.security.oauth2.providers.LoginAuthenticationProvider;
@@ -42,7 +43,7 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 	private static final String URL_LOGOUT = "/oauth/logout**";
 
 	private static final String URL_SESION_CERRADA = "/oauth/sesionCerrada";
-	
+
 	@Autowired
 	private CorsFilter corsFilter;
 	
@@ -67,11 +68,11 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 		http.addFilterBefore(corsFilter, ChannelProcessingFilter.class);
 		http.addFilterBefore(getCharacterEncodingFilter(), CsrfFilter.class);
 		http.addFilterAfter(exceptionTranslationFilter(), ExceptionTranslationFilter.class);
+		http.addFilterBefore(restriccionesFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(capturaParametrosFilter(), UsernamePasswordAuthenticationFilter.class);
-
 		http
 			.authorizeRequests()
-				.antMatchers("/oauth/login**", "/", "/.well-known/**", "/oauth/error").permitAll()
+				.antMatchers("/oauth/login**", "/", "/.well-known/**", "/oauth/error", "/accessDenied").permitAll()
 				.anyRequest().authenticated()
 			
 			.and()
@@ -101,7 +102,7 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 //					.invalidSessionUrl(URL_SESION_CERRADA)
 			.and()
 				.exceptionHandling()
-				.authenticationEntryPoint(authenticationEntryPoint())
+					.authenticationEntryPoint(authenticationEntryPoint())
 			.and()
 			.headers().cacheControl();
 	}
@@ -147,6 +148,11 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 		filter.setEncoding("UTF-8");
 		filter.setForceEncoding(Boolean.TRUE.booleanValue());
 		return filter;
+	}
+	
+	@Bean
+	public RestriccionesFilter restriccionesFilter() {
+		return new RestriccionesFilter();
 	}
 	
 	@Bean

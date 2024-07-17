@@ -13,6 +13,8 @@ public final class Tablas {
 	public static final String REFRESHTOKEN = "REFRESHTOKEN";
 	
 	public static final String REGISTROAUDITORIA = "REGISTROAUDITORIA";
+	
+	public static final String RESTRICCION = "RESTRICCION";
 
 	private Tablas() {
 		super();
