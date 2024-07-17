@@ -51,6 +51,7 @@ import org.springframework.web.filter.CorsFilter;
 import net.edu.sartuoauth.core.daos.impl.OauthAuthorizationCodeServices;
 import net.edu.sartuoauth.core.daos.impl.OauthJdbcTokenStore;
 import net.edu.sartuoauth.core.facades.ClientDetailsServiceFacade;
+import net.edu.sartuoauth.core.security.filters.AuditoriaFilter;
 import net.edu.sartuoauth.core.security.oauth2.OauthTokenEnhancer;
 import net.edu.sartuoauth.core.security.oauth2.pkce.PkceAuthorizationCodeTokenGranter;
 
@@ -102,8 +103,15 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 //		security.tokenKeyAccess(PERMIT_ALL).checkTokenAccess(PERMIT_ALL);
 		
 		security.addTokenEndpointAuthenticationFilter(corsFilter);
+		
+		// Filtro para auditar los accesos
+		security.addTokenEndpointAuthenticationFilter(auditoriaFilter());
 	}
 	
+	@Bean
+	public AuditoriaFilter auditoriaFilter() {
+		return new AuditoriaFilter();
+	}	
 	/**
 	 * Sobrescribe la configuración predeterminada de la fuente desde donde se va a obtener información de los clientes
 	 * 

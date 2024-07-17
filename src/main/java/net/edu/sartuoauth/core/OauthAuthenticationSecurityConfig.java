@@ -18,12 +18,14 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import net.edu.sartuoauth.core.security.filters.CapturaParametrosFilter;
 import net.edu.sartuoauth.core.security.handlers.OauthLogoutHandler;
 import net.edu.sartuoauth.core.security.handlers.OauthLogoutSuccessHandler;
 import net.edu.sartuoauth.core.security.oauth2.providers.LoginAuthenticationProvider;
@@ -33,7 +35,6 @@ import net.edu.sartuoauth.core.security.oauth2.services.OauthUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @PropertySource("classpath:net/edu/sartuoauth/core/config/sartu.properties")
-//@ComponentScan(basePackages = { "net.edu.sartuoauth.security.crypto" })
 public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String URL_LOGIN = "/oauth/login";
@@ -66,6 +67,7 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 		http.addFilterBefore(corsFilter, ChannelProcessingFilter.class);
 		http.addFilterBefore(getCharacterEncodingFilter(), CsrfFilter.class);
 		http.addFilterAfter(exceptionTranslationFilter(), ExceptionTranslationFilter.class);
+		http.addFilterBefore(capturaParametrosFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		http
 			.authorizeRequests()
@@ -145,6 +147,11 @@ public class OauthAuthenticationSecurityConfig extends WebSecurityConfigurerAdap
 		filter.setEncoding("UTF-8");
 		filter.setForceEncoding(Boolean.TRUE.booleanValue());
 		return filter;
+	}
+	
+	@Bean
+	public CapturaParametrosFilter capturaParametrosFilter() {
+		return new CapturaParametrosFilter();
 	}
 	
 	@Bean

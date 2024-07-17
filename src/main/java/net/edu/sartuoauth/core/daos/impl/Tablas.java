@@ -11,6 +11,8 @@ public final class Tablas {
 	public static final String ACCESSTOKEN = "ACCESSTOKEN";
 
 	public static final String REFRESHTOKEN = "REFRESHTOKEN";
+	
+	public static final String REGISTROAUDITORIA = "REGISTROAUDITORIA";
 
 	private Tablas() {
 		super();
